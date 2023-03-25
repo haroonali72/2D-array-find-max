@@ -23,3 +23,5 @@ The largest value is  after all operations are performed.
 
 
 update a
+
+update b
