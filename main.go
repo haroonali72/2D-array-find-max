@@ -11,46 +11,25 @@ func main() {
 }
 
 func arrayManipulation(n int32, queries [][]int32) int64 {
-	manipulatedData := zeroValues2DArray(n, queries)
-	max := int64(0)
-
-	for i, _ := range manipulatedData {
-		var j int32
-		for j = 0; j < n; j++ {
-			if j+1 >= queries[i][0] && j+1 <= queries[i][1] {
-				if i > 0 {
-					manipulatedData[i][j] = queries[i][2] + manipulatedData[i-1][j]
-				} else {
-					manipulatedData[i][j] = queries[i][2]
-				}
-			} else if i > 0 {
-				manipulatedData[i][j] = manipulatedData[i-1][j]
-			}
+	arr := make([]int64, n)
+	for _, q := range queries {
+		a := q[0] - 1
+		b := q[1] - 1
+		k := int64(q[2])
+		arr[a] += k
+		if b+1 < n {
+			arr[b+1] -= k
 		}
+	}
 
-		max = compareAndFindMax(max, manipulatedData[i])
+	max := int64(0)
+	sum := int64(0)
+	for _, val := range arr {
+		sum += val
+		if sum > max {
+			max = sum
+		}
 	}
 
 	return max
-}
-
-func zeroValues2DArray(n int32, queries [][]int32) [][]int32 {
-	emptyData := make([][]int32, len(queries))
-	for index, _ := range emptyData {
-		emptyData[index] = make([]int32, n)
-	}
-
-	return emptyData
-}
-
-func compareAndFindMax(max int64, nums []int32) int64 {
-	m := int32(max)
-
-	for _, n := range nums {
-		if m < n {
-			m = n
-		}
-	}
-
-	return int64(m)
 }
